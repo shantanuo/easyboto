@@ -1,13 +1,8 @@
 class myboto:
-    import boto
-    import psycopg2
-    import sqlalchemy 
-    import pandas as pd
-    from pprint import pprint
-    
     def __init__(self, access, secret):
         self.ac = access
         self.se = secret
+        import boto
         self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         
     def _showSnap(self):
