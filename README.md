@@ -4,14 +4,15 @@ manage redshift using boto
 Save the file easyboto.py in the same directory from where you are running python.
 
 1) import module
+
 from easyboto import myboto
 
 2) initialize the class with login credentials
+
 x = myboto('xxx', 'yyy')
 
-3) a new connection object called x is created that can be used now...
- 
-4) Describe the current running cluster
+3) Describe the current running cluster
+
 x.showCluster()
 
 5) start a new cluster based on the latest snapshot
