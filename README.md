@@ -15,24 +15,30 @@ x = myboto('xxx', 'yyy')
 
 x.showCluster()
 
-5) start a new cluster based on the latest snapshot
+4) start a new cluster based on the latest snapshot
+
 x.startCluster()
 
-6) This does not actually delete the cluster for security reasons. It shows the command to do so :)
+5) This does not actually delete the cluster for security reasons. It shows the command to do so :)
+
 x.deleteCluster()
  
-7) show all backup snapshots 
+6) show all backup snapshots 
+
 x.SnapshotShow() 
 
-8) create a snapshot of the current cluster
+7) create a snapshot of the current cluster
+
 x.snapshotCreate()
 
-9) delete a given snapshot
+8) delete a given snapshot
+
 x.snapshotDelete()
 
-10) Download snapshot data in csv format 
+9) Download snapshot data in csv format 
+
 x.SnapshotDown('/var/www/html/new_email360_panel/abcx121xxx.csv')
 
-11) Execute any query
-x.runQuery('select * from school1_oct_sending limit 10')
+10) Execute any query
 
+x.runQuery('select * from school1_oct_sending limit 10')
