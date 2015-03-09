@@ -76,6 +76,7 @@ class myboto:
         cur = pconn.cursor()            
         cur.execute(my_query)
         mydict = cur.fetchall()
+        import pandas as pd
         df = pd.DataFrame(mydict)
         print df
         
