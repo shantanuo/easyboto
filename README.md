@@ -42,3 +42,13 @@ x.SnapshotDown('/var/www/html/new_email360_panel/abcx121xxx.csv')
 10) Execute any query
 
 x.runQuery('select * from school1_oct_sending limit 10')
+
+11) list all ec2 instances in default region (us-eash N. Virginia)
+
+x.ec2_list()
+
+12) List all buckets and their lifeCycle rules if any
+
+x.bucketLifeCycle()
+
+x.bucketList()
