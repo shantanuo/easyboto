@@ -114,7 +114,7 @@ class myboto:
         
     def listImages(self):
         mylist=[]
-        i_list=ec2_conn.get_all_images(owners=['self'])
+        i_list=self.ec2_conn.get_all_images(owners=['self'])
         for i in i_list:
             mylist.append((i.id, i.is_public, i.description))
         import pandas as pd
