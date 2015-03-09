@@ -52,3 +52,7 @@ x.ec2_list()
 x.bucketLifeCycle()
 
 x.bucketList()
+
+13) List of iamges
+
+x.listImages()
