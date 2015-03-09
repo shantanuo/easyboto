@@ -110,3 +110,15 @@ class myboto:
         col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
         df = pd.DataFrame(mylist, columns=col_name)
         print df
+        
+        
+    def listImages(self):
+        mylist=[]
+        i_list=ec2_conn.get_all_images(owners=['self'])
+        for i in i_list:
+            mylist.append((i.id, i.is_public, i.description))
+        import pandas as pd
+        col_name=['image_id', 'is_public', 'description']
+        df = pd.DataFrame(mylist, columns=col_name)
+        print df
+    
