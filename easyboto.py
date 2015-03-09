@@ -4,7 +4,11 @@ class myboto:
         self.se = secret
         import boto
         self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-        
+        from boto.s3.connection import OrdinaryCallingFormat
+        self.s3_conn = boto.connect_s3(aws_access_key_id=self.ac, aws_secret_access_key=self.se,calling_format=OrdinaryCallingFormat())
+        self.buckets = self.s3_conn.get_all_buckets()
+        self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
+    
     def _showSnap(self):
         self.mydict=self.red_conn.describe_clusters()
         self.my_add=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['Endpoint']['Address']
@@ -79,4 +83,30 @@ class myboto:
         import pandas as pd
         df = pd.DataFrame(mydict)
         print df
-        
+
+##### s3 Management #####
+
+    def bucketList(self):
+        for item in self.buckets:
+            print item.name
+
+    def bucketLifeCycle(self):
+        for item in self.buckets:
+            try:
+                current = item.get_lifecycle_config()
+                print item, current[0].transition
+            except:
+                pass
+
+##### ec2 Management #####
+
+    def ec2_list(self):
+        mylist=[]
+        info=self.ec2_conn.get_only_instances()
+        for reservation in info:
+            mylist.append( (reservation , reservation.launch_time, reservation.instance_type, 
+                            reservation.image_id,reservation.state, reservation.ip_address))
+        import pandas as pd
+        col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
+        df = pd.DataFrame(mylist, columns=col_name)
+        print df
