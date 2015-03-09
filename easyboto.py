@@ -12,6 +12,7 @@ class myboto:
         self.snapshots = self.response['DescribeClusterSnapshotsResponse']['DescribeClusterSnapshotsResult']['Snapshots']
         self.snapshots.sort(key=lambda d: d['SnapshotCreateTime'])
         self.mysnapidentifier = self.snapshots[-1]['SnapshotIdentifier']
+        import pandas as pd
         self.df=pd.DataFrame(self.snapshots)
         self.df['ClusterCreateDate'] = pd.to_datetime(self.df['ClusterCreateTime'],unit='s')
         self.df['SnapshotCreateDate'] = pd.to_datetime(self.df['SnapshotCreateTime'],unit='s')
@@ -24,6 +25,7 @@ class myboto:
     def showCluster(self):
         ''' show details of the cluster currently active '''
         self._showSnap()
+        from pprint import pprint
         pprint(self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'])
         
     def startCluster(self):
@@ -69,6 +71,7 @@ class myboto:
 
     def runQuery(self, my_query):
         self._showSnap()
+        import psycopg2
         pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='mydb' user='root' password='Root1234'")
         cur = pconn.cursor()            
         cur.execute(my_query)
