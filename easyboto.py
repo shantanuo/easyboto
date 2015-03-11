@@ -57,17 +57,17 @@ class myboto:
         
 ##### Snapshots Management #####
 
-    def snapshotShow(self):
+    def showSnapshot(self):
         '''show all snapshots '''
         self._showSnap()
         print self.newdf
         
-    def snapshotCreate(self):
+    def startSnapshot(self):
         self._showSnap()
         myidentifier=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['ClusterIdentifier']
         self.red_conn.create_cluster_snapshot(self.myvar, myidentifier)        
     
-    def snapshotDelete(self, snapshot_identifier_todelete):
+    def deleteSnapshot(self, snapshot_identifier_todelete):
         self.red_conn.delete_cluster_snapshot(snapshot_identifier_todelete)
     
     def snapshotDown(self, path='/var/www/html/new_email360_panel/abcx.csv'):
@@ -91,11 +91,11 @@ class myboto:
 
 ##### s3 Management #####
 
-    def bucketList(self):
+    def showBucket(self):
         for item in self.buckets:
             print item.name
 
-    def bucketLifeCycle(self):
+    def showBucketLifeCycle(self):
         for item in self.buckets:
             try:
                 current = item.get_lifecycle_config()
@@ -105,7 +105,7 @@ class myboto:
 
 ##### ec2 Management #####
 
-    def ec2_list(self):
+    def showEc2(self):
         mylist=[]
         info=self.ec2_conn.get_only_instances()
         for reservation in info:
@@ -117,7 +117,7 @@ class myboto:
         print df
         
         
-    def listImages(self):
+    def showImages(self):
         mylist=[]
         i_list=self.ec2_conn.get_all_images(owners=['self'])
         for i in i_list:
