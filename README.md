@@ -11,7 +11,7 @@ from easyboto import myboto
 
 x = myboto('xxx', 'yyy')
 
-
+## Redshift Cluster management ##
 
 3) Describe the current running cluster
 
@@ -25,7 +25,7 @@ x.startCluster()
 
 x.deleteCluster()
 
-
+## Redshift Snapshot management ##
 
 6) show all backup snapshots
 
@@ -43,13 +43,13 @@ x.deleteSnapshot('name_of_snap')
 
 x.snapshotDown('/var/www/html/new_email360_panel/abcx121xxx.csv')
 
-
+## Redshift Query management ##
 
 10) Execute any Redshift query
 
 x.runQuery('select * from school1_oct_sending limit 10')
 
-
+## EC2 management ##
 
 11) list all ec2 instances an images in default region (us-eash N. Virginia)
 
@@ -57,7 +57,7 @@ x.showEc2()
 
 x.ShowImages()
 
-
+## S3 management ##
 
 12) List all buckets and their lifeCycle rules if any
 
