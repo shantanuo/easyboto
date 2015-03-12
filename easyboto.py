@@ -138,7 +138,6 @@ class myboto:
         import pandas as pd
         col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
         df = pd.DataFrame(mylist, columns=col_name)
-        print df
         return df
         
     def startEc2(self):
