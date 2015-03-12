@@ -75,7 +75,7 @@ class myboto:
     def runQuery(self, my_query):
         self._showSnap()
         import psycopg2
-        pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='mydb' user='root' password='Root1234'")
+        pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='mydb' user='root' password='passwd'")
         cur = pconn.cursor()            
         cur.execute(my_query)
         mydict = cur.fetchall()
