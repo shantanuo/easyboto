@@ -139,3 +139,7 @@ e) Upload or download a file to / from S3 bucket
     from easyboto import myboto
     x = myboto('your_access_key', 'your_secret_key')
     x.showBucket()
+
+# How to download:
+
+    !wget --no-check-certificate https://raw.githubusercontent.com/shantanuo/easyboto/master/easyboto.py
