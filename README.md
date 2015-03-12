@@ -81,7 +81,7 @@ x.showBucketLifeCycle()
 x.showBucket()
 
 
-# modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
+    modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
 
 ## easyboto cheatsheet
 
