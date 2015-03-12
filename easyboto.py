@@ -92,7 +92,7 @@ class myboto:
             for key in bucket.list():
                 print key.name.encode('utf-8')
         else:
-            for item in self.buckets:
+            for item in self.bucketname:
                 print item.name
                 
     def upload(self, bucketname, filename='', path=''):
