@@ -81,11 +81,15 @@ x.showBucket('bucket_name')
 
 15) Upload file to a given bucket. Optionally specify S3 path
 
-x.upload('bucket_name', '/new/path', '/path/to/file.csv')
+x.uploadFile('bucket_name', '/new/path', '/path/to/file.csv')
 
-16) Delete a file from given bucket
+16) Download file 
 
-x.delete('bucket_name', 'file.csv')
+x.downloadFile('bucket_name', 'file.csv')
+
+16) Delete a file from the bucket
+
+x.deleteFile('bucket_name', 'file.csv')
 
 17) List bucket lifeCycle if any:
 
