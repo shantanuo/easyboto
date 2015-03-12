@@ -122,9 +122,10 @@ d) run any Redshift query
 
     runQuery(my_query):
 
-e) Upload a local file to S3 bucket
+e) Upload or download a file to / from S3 bucket
 
-    upload('bucket_name', '/path/to/file.csv')
+    uploadFile('bucket_name', '/path/to/file.csv')
+    downloadFile('bucket_name', 'file_name.csv')
     
 
 # How to use:
