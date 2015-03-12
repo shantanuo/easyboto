@@ -155,4 +155,5 @@ class myboto:
         col_name=['image_id', 'is_public', 'name', 'description', 'region']
         df = pd.DataFrame(mylist, columns=col_name)
         print df
+        return df
 
