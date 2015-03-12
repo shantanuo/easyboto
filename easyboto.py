@@ -106,7 +106,7 @@ class myboto:
         k.set_contents_from_filename(filename)
         print bucket, full_key_name
                     
-    def delete(self, bucketname, filename):
+    def deleteFile(self, bucketname, filename):
         mybucket = s3_conn.get_bucket(bucketname)
         mybucket.delete_key(filename)
                 
