@@ -88,11 +88,11 @@ class myboto:
 
     def showBucket(self, bucketname=''):
         if bucketname:
-            bucket = s3_conn.get_bucket(bucketname)
+            bucket = self.s3_conn.get_bucket(bucketname)
             for key in bucket.list():
                 print key.name.encode('utf-8')
         else:
-            for item in self.bucketname:
+            for item in self.buckets:
                 print item.name
                 
     def upload(self, bucketname, filename='', path=''):
@@ -101,7 +101,7 @@ class myboto:
         key_name =  filename.split('/')[-1]
         import os
         full_key_name = os.path.join(path, key_name)
-        mybucket = s3_conn.get_bucket(bucketname)
+        mybucket = self.s3_conn.get_bucket(bucketname)
         k = mybucket.new_key(full_key_name)
         k.set_contents_from_filename(filename)
         print bucket, full_key_name
