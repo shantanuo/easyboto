@@ -70,12 +70,6 @@ class myboto:
     
     def deleteSnapshot(self, snapshot_identifier_todelete):
         self.red_conn.delete_cluster_snapshot(snapshot_identifier_todelete)
-    
-    def snapshotDown(self, path='/var/www/html/new_email360_panel/abcx.csv'):
-        '''copy snapshot data to csv that can be downloaded from the path'''
-        self._showSnap()
-        self.newdf.to_csv(path)
-       
         
 ##### Query Management #####
 
