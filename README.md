@@ -67,9 +67,7 @@ x.deleteEc2('instance_id')
 
 14) Terminate all ec2 instances.
 
-# This does not actually delete all EC2 instances for security reasons. 
-
-# It shows the command to do so :)
+This does not actually delete all EC2 instances for security reasons. It shows the command to do so :)
 
 x.deteleAllEc2()
 
@@ -84,3 +82,30 @@ x.showBucket()
 
 
 # modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
+
+## easyboto cheatsheet
+
+a) show details of cluster, snapshot, bucket, bucket life Cycle, ec2 or images.
+
+    showCluster
+    showSnapshot
+    showBucket
+    showBucketLifeCycle
+    showEc2
+    showImages
+
+b) Start a new cluster based on latest snapshot, create a snapshot of running cluster or start an ec2 instance
+
+    startCluster
+    startSnapshot
+    startEc2
+
+c) delete a given ec2 instance or snapsshot. Statements are generated to delete all instances or to delete current cluster.
+
+    deleteEc2(instance_id_to_delete)
+    deleteAllEc2
+    deleteCluster
+    deleteSnapshot(snapshot_identifier_todelete)
+
+d) run any Redshift query
+    runQuery(my_query):
