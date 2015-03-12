@@ -89,14 +89,15 @@ class myboto:
 
     def showBucket(self, bucketname=''):
         if bucketname:
-            bucket = self.s3_conn.get_bucket(bucketname)
-            for key in bucket.list():
-                print key.name.encode('utf-8')
+            mybucket = self.s3_conn.get_bucket(bucketname)
+            for key in mybucket.list():
+                mykey = mybucket.lookup(key)
+                print key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB'
         else:
             for item in self.buckets:
                 print item.name
                 
-    def upload(self, bucketname, filename='', path=''):
+    def uploadFile(self, bucketname, filename='', path=''):
         from boto.s3.key import Key
         k = Key(bucketname)
         key_name =  filename.split('/')[-1]
@@ -107,8 +108,16 @@ class myboto:
         k.set_contents_from_filename(filename)
         print bucket, full_key_name
                     
+    def downloadFile(self, bucketname, filename):
+        mybucket = self.s3_conn.get_bucket(bucketname)
+        for b in mybucket:
+            if b.name == filename:
+                new_file = filename.split('/')[-1]
+                b.get_contents_to_filename(new_file)
+
+            
     def deleteFile(self, bucketname, filename):
-        mybucket = s3_conn.get_bucket(bucketname)
+        mybucket = self.s3_conn.get_bucket(bucketname)
         mybucket.delete_key(filename)
                 
     def showBucketLifeCycle(self):
