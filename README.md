@@ -117,3 +117,9 @@ e) Upload a local file to S3 bucket
 
     upload('bucket_name', '/path/to/file.csv')
     
+
+# How to use:
+
+    from easyboto import myboto
+    x = myboto('your_access_key', 'your_secret_key')
+    x.showBucket()
