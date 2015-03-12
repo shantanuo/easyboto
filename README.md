@@ -90,6 +90,7 @@ a) show details of cluster, snapshot, bucket, bucket life Cycle, ec2 or images.
     showCluster
     showSnapshot
     showBucket
+    showBucket('bucket_name')
     showBucketLifeCycle
     showEc2
     showImages
@@ -102,10 +103,17 @@ b) Start a new cluster based on latest snapshot, create a snapshot of running cl
 
 c) delete a given ec2 instance or snapsshot. Statements are generated to delete all instances or to delete current cluster.
 
-    deleteEc2(instance_id_to_delete)
+    deleteEc2('instance_id_to_delete')
+    deleteFile('bucket_name', 'file_name')
     deleteAllEc2
     deleteCluster
-    deleteSnapshot(snapshot_identifier_todelete)
+    deleteSnapshot('snapshot_identifier_todelete')
 
 d) run any Redshift query
+
     runQuery(my_query):
+
+e) Upload a local file to S3 bucket
+
+    upload('bucket_name', '/path/to/file.csv')
+    
