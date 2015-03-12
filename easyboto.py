@@ -8,8 +8,7 @@ class myboto:
         self.s3_conn = boto.connect_s3(aws_access_key_id=self.ac, aws_secret_access_key=self.se,calling_format=OrdinaryCallingFormat())
         self.buckets = self.s3_conn.get_all_buckets()
         self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-    
-       
+               
     def _showSnap(self):
         self.mydict=self.red_conn.describe_clusters()
         self.my_add=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['Endpoint']['Address']
@@ -87,10 +86,30 @@ class myboto:
 
 ##### s3 Management #####
 
-    def showBucket(self):
-        for item in self.buckets:
-            print item.name
-
+    def showBucket(self, bucketname=''):
+        if bucketname:
+            bucket = s3_conn.get_bucket(bucketname)
+            for key in bucket.list():
+                print key.name.encode('utf-8')
+        else:
+            for item in self.buckets:
+                print item.name
+                
+    def upload(self, bucketname, filename='', path=''):
+        from boto.s3.key import Key
+        k = Key(bucketname)
+        key_name =  filename.split('/')[-1]
+        import os
+        full_key_name = os.path.join(path, key_name)
+        mybucket = s3_conn.get_bucket(bucketname)
+        k = mybucket.new_key(full_key_name)
+        k.set_contents_from_filename(filename)
+        print bucket, full_key_name
+                    
+    def delete(self, bucketname, filename):
+        mybucket = s3_conn.get_bucket(bucketname)
+        mybucket.delete_key(filename)
+                
     def showBucketLifeCycle(self):
         for item in self.buckets:
             try:
@@ -151,4 +170,3 @@ class myboto:
         df = pd.DataFrame(mylist, columns=col_name)
         print df
         return df
-
