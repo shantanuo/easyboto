@@ -104,10 +104,10 @@ b) Start a new cluster based on latest snapshot, create a snapshot of running cl
 c) delete a given ec2 instance or snapsshot. Statements are generated to delete all instances or to delete current cluster.
 
     deleteEc2('instance_id_to_delete')
-    deleteFile('bucket_name', 'file_name')
     deleteAllEc2
     deleteCluster
     deleteSnapshot('snapshot_identifier_todelete')
+    deleteFile('bucket_name', 'file_name')
 
 d) run any Redshift query
 
