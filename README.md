@@ -85,7 +85,7 @@ x.showBucket()
 
 ## easyboto cheatsheet
 
-a) show details of cluster, snapshot, bucket, files in bcuket, bucket life Cycle, ec2 or images.
+a) show details of cluster, snapshot, bucket, files in bucket, bucket life Cycle, ec2 or images.
 
     showCluster
     showSnapshot
