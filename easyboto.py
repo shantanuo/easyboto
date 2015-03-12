@@ -88,6 +88,7 @@ class myboto:
         import pandas as pd
         df = pd.DataFrame(mydict)
         print df
+        return df
 
 ##### s3 Management #####
 
@@ -115,8 +116,36 @@ class myboto:
         col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
         df = pd.DataFrame(mylist, columns=col_name)
         print df
+        return df
         
+    def startEc2(self):
+        rid=self.ec2_conn.run_instances('ami-fc73d494', placement='us-east-1a', key_name='april142014',
+                                        instance_type='t1.micro', security_groups=['all port open'])
+        import time
+        time.sleep(30)
+        iid=self.ec2_conn.get_all_instances(filters={'reservation-id': rid.id})[0].instances[0]
+        address = self.ec2_conn.allocate_address()
+        self.ec2_conn.associate_address(iid.id, address.public_ip)
+        print 'ssh -i april142014.pem ubuntu@'+address.public_ip
+
+    def deleteEc2(self,  instance_id_to_delete, mylist=None):
+        mylist=[]
+        mylist.append(instance_id_to_delete)
+        print mylist
+        self.ec2_conn.terminate_instances(instance_ids=mylist)
+ 
+    def deleteAllEc2(self):
+        mylistDel=[]
+        info=self.ec2_conn.get_only_instances()
+        for reservation in info:
+            mylistDel.append(reservation.id)
+              
+        print "this does not actually delete the ec2 instances. Run the following command on your own risk :)\n"
+        print "import boto"
+        print "ec2_conn = boto.connect_ec2(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se)
+        print "ec2_conn.terminate_instances(instance_ids=%s)" % (mylistDel)      
         
+                
     def showImages(self):
         mylist=[]
         i_list=self.ec2_conn.get_all_images(owners=['self'])
