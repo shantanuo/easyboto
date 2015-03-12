@@ -57,6 +57,23 @@ x.showEc2()
 
 x.ShowImages()
 
+12) Create an ec2 instance.
+
+x.startEc2()
+
+13) Terminate ec2 instance.
+
+x.deleteEc2('instance_id')
+
+14) Terminate all ec2 instances.
+
+# This does not actually delete all EC2 instances for security reasons. 
+
+# It shows the command to do so :)
+
+x.deteleAllEc2()
+
+
 ## S3 management ##
 
 12) List all buckets and their lifeCycle rules if any
@@ -64,3 +81,6 @@ x.ShowImages()
 x.showBucketLifeCycle()
 
 x.showBucket()
+
+
+# modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
