@@ -39,33 +39,29 @@ x.startSnapshot()
 
 x.deleteSnapshot('name_of_snap')
 
-9) Download snapshot data in csv format
-
-x.snapshotDown('/var/www/html/new_email360_panel/abcx121xxx.csv')
-
 ## Redshift Query management ##
 
-10) Execute any Redshift query
+9) Execute any Redshift query
 
 x.runQuery('select * from school1_oct_sending limit 10')
 
 ## EC2 management ##
 
-11) list all ec2 instances an images in default region (us-eash N. Virginia)
+10) list all ec2 instances an images in default region (us-eash N. Virginia)
 
 x.showEc2()
 
 x.ShowImages()
 
-12) Create an ec2 instance.
+11) Create an ec2 instance.
 
 x.startEc2()
 
-13) Terminate ec2 instance.
+12) Terminate ec2 instance.
 
 x.deleteEc2('instance_id')
 
-14) Terminate all ec2 instances.
+13) Terminate all ec2 instances.
 
 This does not actually delete all EC2 instances for security reasons. It shows the command to do so :)
 
@@ -74,11 +70,24 @@ x.deteleAllEc2()
 
 ## S3 management ##
 
-12) List all buckets and their lifeCycle rules if any
+14) List all buckets or files from a bucket 
+
+x.showBucket()
+
+x.showBucket('bucket_name')
+
+15) Upload file to a given bucket. Optionally specify a path of S3
+
+x.upload('bucket_name', '/new/path', '/path/to/file.csv')
+
+16) Delete a file from given bucket
+
+x.delete('bucket_name', 'file.csv')
+
+17) List bucket lifeCycle if any:
 
 x.showBucketLifeCycle()
 
-x.showBucket()
 
 ## easyboto cheatsheet
 
