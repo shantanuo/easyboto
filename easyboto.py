@@ -1,4 +1,5 @@
 class myboto:
+    '''Managing AWS using boto made easy'''
     def __init__(self, access, secret):
         self.ac = access
         self.se = secret
