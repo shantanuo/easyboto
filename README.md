@@ -47,13 +47,16 @@ x.runQuery('select * from school1_oct_sending limit 10')
 
 ## EC2 management ##
 
-10) list all ec2 instances an images in default region (us-eash N. Virginia)
+10) list all ec2 instances and all images in default region (us-eash N. Virginia)
 
 x.showEc2()
 
 x.ShowImages()
 
 11) Create an ec2 instance.
+    
+    image id, region, key, type and security group needs to be changed in the source file.
+    'ami-fc73d494', 'us-east-1a', 'april142015', 't1.micro', ['all port open']
 
 x.startEc2()
 
@@ -76,7 +79,7 @@ x.showBucket()
 
 x.showBucket('bucket_name')
 
-15) Upload file to a given bucket. Optionally specify a path of S3
+15) Upload file to a given bucket. Optionally specify S3 path
 
 x.upload('bucket_name', '/new/path', '/path/to/file.csv')
 
