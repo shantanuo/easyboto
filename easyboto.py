@@ -106,7 +106,7 @@ class myboto:
         mybucket = self.s3_conn.get_bucket(bucketname)
         k = mybucket.new_key(full_key_name)
         k.set_contents_from_filename(filename)
-        print mybucket, full_key_name
+        print bucketname, full_key_name
                     
     def downloadFile(self, bucketname, filename):
         mybucket = self.s3_conn.get_bucket(bucketname)
