@@ -87,11 +87,11 @@ x.uploadFile('bucket_name', '/new/path', '/path/to/file.csv')
 
 x.downloadFile('bucket_name', 'file.csv')
 
-16) Delete a file from the bucket
+17) Delete a file from the bucket
 
 x.deleteFile('bucket_name', 'file.csv')
 
-17) List bucket lifeCycle if any:
+18) List bucket lifeCycle if any:
 
 x.showBucketLifeCycle()
 
