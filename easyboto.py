@@ -137,8 +137,11 @@ class myboto:
                             reservation.image_id,reservation.state, reservation.ip_address))
         import pandas as pd
         col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
-        df = pd.DataFrame(mylist, columns=col_name)
-        return df
+        try:
+            df = pd.DataFrame(mylist, columns=col_name)
+            return df
+        except ValueError:
+            pass
         
     def startEc2(self):
         rid=self.ec2_conn.run_instances('ami-fc73d494', placement='us-east-1a', key_name='april142014',
