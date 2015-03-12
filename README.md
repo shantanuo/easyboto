@@ -80,9 +80,6 @@ x.showBucketLifeCycle()
 
 x.showBucket()
 
-
-    modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
-
 ## easyboto cheatsheet
 
 a) show details of cluster, snapshot, buckets, files in bucket, bucket life Cycle, ec2 or images.
@@ -119,6 +116,8 @@ e) Upload a local file to S3 bucket
     
 
 # How to use:
+
+    modules required are boto and pandas. Optionally import psycopg2 if you want to run redshift queries.
 
     from easyboto import myboto
     x = myboto('your_access_key', 'your_secret_key')
