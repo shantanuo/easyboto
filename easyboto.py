@@ -60,7 +60,6 @@ class myboto:
     def showSnapshot(self):
         '''show all snapshots '''
         self._showSnap()
-        print self.newdf
         return self.newdf
         
     def startSnapshot(self):
