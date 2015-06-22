@@ -88,10 +88,16 @@ class myboto:
 
     def showBucket(self, bucketname=''):
         if bucketname:
+            mydict = list()
             mybucket = self.s3_conn.get_bucket(bucketname)
             for key in mybucket.list():
                 mykey = mybucket.lookup(key)
+
+                mydict.append((key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB'))
+                import pandas as pd
+                df = pd.DataFrame(mydict)
                 print key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB'
+            return df
         else:
             for item in self.buckets:
                 print item.name
