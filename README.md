@@ -156,3 +156,8 @@ easily save the output dict to mongodb test database, collection name: posts
     db.posts.insert_one(y)
 
     db.posts.find_one()
+
+If the function returns dataframe then it is easy to copy the data from pandas to mongodb
+
+    df=x.showSnapshot()
+    db.posts.insert_many(df.to_dict('records'))
