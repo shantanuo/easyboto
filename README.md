@@ -54,9 +54,6 @@ x.showEc2()
 x.ShowImages()
 
 11) Create an ec2 instance.
-    
-    image id, region, key, type and security group needs to be changed in the source file.
-    'ami-fc73d494', 'us-east-1a', 'april142015', 't1.micro', ['all port open']
 
 x.startEc2()
 
