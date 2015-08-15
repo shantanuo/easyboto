@@ -37,6 +37,7 @@ class myboto:
         self._showSnap()
         from pprint import pprint
         pprint(self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'])
+        return self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters']
         
     def startCluster(self):
         '''start a new cluster if no cluster is active'''
