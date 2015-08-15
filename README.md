@@ -143,3 +143,16 @@ modules required are boto and pandas. Optionally import psycopg2 if you want to 
 # How to download:
 
     !wget --no-check-certificate https://raw.githubusercontent.com/shantanuo/easyboto/master/easyboto.py
+
+# How to save:
+
+easily save the output dict to mongodb test database, collection name: posts
+
+    y=x.showCluster()[0]
+
+    from pymongo import MongoClient
+    client = MongoClient()
+    db = client.test
+    db.posts.insert_one(y)
+
+    db.posts.find_one()
