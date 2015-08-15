@@ -160,6 +160,7 @@ If the function returns dataframe then it is easy to copy the data from pandas t
     db.posts.insert_many(df.to_dict('records'))
 
 you may need to correct the data
+
     df["region"] = df["region"].map(lambda x: str(x).split(':')[-1:])
 
 
