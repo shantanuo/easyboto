@@ -9,7 +9,7 @@ from easyboto import myboto
 
 2) initialize the class with login credentials. Access and Secret key of your AWS account is required.
 
-x = myboto('xxx', 'yyy')
+x = connect('xxx', 'yyy')
 
 ## Redshift Cluster management ##
 
@@ -137,9 +137,9 @@ modules required are boto and pandas. Optionally import psycopg2 if you want to 
     x = myboto('your_access_key', 'your_secret_key')
     x.showBucket()
 
-# How to download:
+# How to install:
 
-    !wget --no-check-certificate https://raw.githubusercontent.com/shantanuo/easyboto/master/easyboto.py
+    pip install easyboto
 
 # How to save:
 
