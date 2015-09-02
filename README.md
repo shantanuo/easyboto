@@ -5,7 +5,7 @@ Save the file easyboto.py in the same directory from where you are running pytho
 
 1) import module
 
-from easyboto import myboto
+from easyboto import connect
 
 2) initialize the class with login credentials. Access and Secret key of your AWS account is required.
 
