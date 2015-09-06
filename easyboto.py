@@ -13,6 +13,8 @@ class connect:
     def _showSnap(self):
         self.mydict=self.red_conn.describe_clusters()
         self.my_add=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['Endpoint']['Address']
+        self.my_db='mydb'
+        self.my_user='root'
         self.response = self.red_conn.describe_cluster_snapshots()
         self.snapshots = self.response['DescribeClusterSnapshotsResponse']['DescribeClusterSnapshotsResult']['Snapshots']
         self.snapshots.sort(key=lambda d: d['SnapshotCreateTime'])
@@ -76,7 +78,7 @@ class connect:
     def runQuery(self, my_query):
         self._showSnap()
         import psycopg2
-        pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='mydb' user='root' password='passwd'")
+        pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='"+self.my_db+"' user='"+self.my_user+"' password='"+self.my_pas+"'")
         cur = pconn.cursor()            
         cur.execute(my_query)
         mydict = cur.fetchall()
