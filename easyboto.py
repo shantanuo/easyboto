@@ -151,19 +151,19 @@ class connect:
         except ValueError:
             pass
         
-
     def startEc2(self, ami, key_name,instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
-        aid = {'image_id': ami, 'key_name': key_name, 'instance_type': instance_type, 'placement': 'us-east-1a'} 
+        aid = {'image_id': ami, 'key_name': key_name, 'instance_type': instance_type, 'placement': 'us-east-1a'}
         daid=dict(aid)
         rid=self.ec2_conn.run_instances(**daid)
 
         import time
-        time.sleep(30)
+        time.sleep(20)
         iid=self.ec2_conn.get_all_instances(filters={'reservation-id': rid.id})[0].instances[0]
-        address = self.ec2_conn.allocate_address()
-        self.ec2_conn.associate_address(iid.id, address.public_ip)
-        print 'ssh -i april142014.pem ubuntu@'+address.public_ip
+        #address = self.ec2_conn.allocate_address()
+        #self.ec2_conn.associate_address(iid.id, address.public_ip)
+        print 'ssh -i ' + key_name+ '.pem ec2-user@'+str(iid.public_dns_name)
+
 
 
     def deleteEc2(self,  instance_id_to_delete, mylist=None):
