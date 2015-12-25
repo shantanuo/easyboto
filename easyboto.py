@@ -3,6 +3,8 @@ class connect:
     def __init__(self, access, secret):
         self.ac = access
         self.se = secret
+        self.placement='us-east-1a'
+        self.key='dec15a'
         import boto
         self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         from boto.s3.connection import OrdinaryCallingFormat
@@ -151,9 +153,10 @@ class connect:
         except ValueError:
             pass
         
-    def startEc2(self, ami, key_name,instance_type):
+
+    def startEc2(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
-        aid = {'image_id': ami, 'key_name': key_name, 'instance_type': instance_type, 'placement': 'us-east-1a'}
+        aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
         daid=dict(aid)
         rid=self.ec2_conn.run_instances(**daid)
 
