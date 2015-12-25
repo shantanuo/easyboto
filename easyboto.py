@@ -165,7 +165,7 @@ class connect:
         iid=self.ec2_conn.get_all_instances(filters={'reservation-id': rid.id})[0].instances[0]
         #address = self.ec2_conn.allocate_address()
         #self.ec2_conn.associate_address(iid.id, address.public_ip)
-        print 'ssh -i ' + key_name+ '.pem ec2-user@'+str(iid.public_dns_name)
+        print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(iid.public_dns_name)
 
 
 
