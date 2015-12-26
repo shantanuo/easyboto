@@ -5,6 +5,9 @@ class connect:
         self.se = secret
         self.placement='us-east-1a'
         self.key='dec15a'
+#        self.myaddress='52.71.62.77'
+        self.myaddress=None
+
         import boto
         self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         from boto.s3.connection import OrdinaryCallingFormat
@@ -153,7 +156,6 @@ class connect:
         except ValueError:
             pass
         
-
     def startEc2(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
         aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
@@ -161,12 +163,17 @@ class connect:
         rid=self.ec2_conn.run_instances(**daid)
 
         import time
-        time.sleep(20)
+        time.sleep(120)
         iid=self.ec2_conn.get_all_instances(filters={'reservation-id': rid.id})[0].instances[0]
         #address = self.ec2_conn.allocate_address()
         #self.ec2_conn.associate_address(iid.id, address.public_ip)
-        print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(iid.public_dns_name)
-
+        if self.myaddress:
+            self.ec2_conn.associate_address(iid.id, self.myaddress)
+            print 'ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress
+        else:
+            address = self.ec2_conn.allocate_address()
+            self.ec2_conn.associate_address(iid.id, address.public_ip)
+            print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip)
 
 
     def deleteEc2(self,  instance_id_to_delete, mylist=None):
