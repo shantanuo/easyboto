@@ -65,7 +65,7 @@ x.deleteEc2('instance_id')
 
 This does not actually delete all EC2 instances for security reasons. It shows the command to do so :)
 
-x.deteleAllEc2()
+x.deleteAllEc2()
 
 
 ## S3 management ##
