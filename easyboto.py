@@ -156,6 +156,32 @@ class connect:
         except ValueError:
             pass
         
+    def startEc2Spot(self, ami, instance_type):
+        #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
+        if instance_type.startswith('t2'):
+            print "spot instance are not allowed for t2 series"
+            exit()
+
+        aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement, 'price': self.MAX_SPOT_BID}
+        daid=dict(aid)
+        rid=self.ec2_conn.request_spot_instances(**daid)
+        import time
+        time.sleep(300)
+        job_sir_id = rid[0].id # spot instance request = sir, job_ is the relevant aws item for this job
+        reqs = self.ec2_conn.get_all_spot_instance_requests()
+        for sir in reqs:
+            if sir.id == job_sir_id:
+                job_instance_id = sir.instance_id
+                print "job instance id: " + str(job_instance_id)
+
+                if self.myaddress:
+                    self.ec2_conn.associate_address(job_instance_id, self.myaddress)
+                    print 'ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress
+                else:
+                    address = self.ec2_conn.allocate_address()
+                    self.ec2_conn.associate_address(job_instance_id, address.public_ip)
+                    print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip)
+
     def startEc2(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
         aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
