@@ -18,8 +18,8 @@ class connect:
     def _showSnap(self):
         self.mydict=self.red_conn.describe_clusters()
         self.my_add=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['Endpoint']['Address']
-        self.my_db='mydb'
-        self.my_user='root'
+#        self.my_db='mydb'
+#        self.my_user='root'
         self.response = self.red_conn.describe_cluster_snapshots()
         self.snapshots = self.response['DescribeClusterSnapshotsResponse']['DescribeClusterSnapshotsResult']['Snapshots']
         self.snapshots.sort(key=lambda d: d['SnapshotCreateTime'])
