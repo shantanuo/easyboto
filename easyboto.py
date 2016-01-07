@@ -1,20 +1,22 @@
 class connect:
     '''Managing AWS using boto made easy'''
-    def __init__(self, access, secret):
+    def __init__(self, access=None, secret=None):
         self.ac = access
         self.se = secret
         self.placement='us-east-1a'
         self.key='dec15a'
 #        self.myaddress='52.71.62.77'
         self.myaddress=None
+        try:
+                import boto
+                self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
+                from boto.s3.connection import OrdinaryCallingFormat
+                self.s3_conn = boto.connect_s3(aws_access_key_id=self.ac, aws_secret_access_key=self.se,calling_format=OrdinaryCallingFormat())
+                self.buckets = self.s3_conn.get_all_buckets()
+                self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
+        except:
+                pass
 
-        import boto
-        self.red_conn = boto.connect_redshift(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-        from boto.s3.connection import OrdinaryCallingFormat
-        self.s3_conn = boto.connect_s3(aws_access_key_id=self.ac, aws_secret_access_key=self.se,calling_format=OrdinaryCallingFormat())
-        self.buckets = self.s3_conn.get_all_buckets()
-        self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-               
     def _showSnap(self):
         self.mydict=self.red_conn.describe_clusters()
         self.my_add=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['Endpoint']['Address']
