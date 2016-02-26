@@ -83,7 +83,7 @@ class connect:
 ##### Query Management #####
 
     def runQuery(self, my_query):
-        self._showSnap()
+#        self._showSnap()
         import psycopg2
         pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='"+self.my_db+"' user='"+self.my_user+"' password='"+self.my_pas+"'")
         cur = pconn.cursor()            
