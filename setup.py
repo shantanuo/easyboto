@@ -8,7 +8,7 @@ setup(
     author = 'Shantanu Oak',
     author_email = 'shantanu.oak@gmail.com',
     url = 'https://github.com/shantanuo/easyboto',
-    download_url = 'https://github.com/shantanuo/easyboto/archive/0.8.tar.gz',
+    download_url = 'https://github.com/shantanuo/easyboto/archive/1.0.tar.gz',
     keywords = ['aws', 'boto'],
     classifiers = [],
 )
