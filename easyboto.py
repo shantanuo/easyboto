@@ -91,6 +91,9 @@ class connect:
         mydict = cur.fetchall()
         import pandas as pd
         df = pd.DataFrame(mydict)
+        import pickle
+        with open('filename.pickle', 'wb') as handle:
+            pickle.dump(df, handle, protocol=pickle.HIGHEST_PROTOCOL)
         print df
         return df
 
