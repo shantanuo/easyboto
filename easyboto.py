@@ -53,17 +53,17 @@ class connect:
         self._showSnap()
         try:
             myidentifier=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['ClusterIdentifier']
-            print "cluster already running"
+            print ("cluster already running")
         except IndexError:
             self.red_conn.restore_from_cluster_snapshot('company', mysnapidentifier, availability_zone='us-east-1a')
 
     def deleteCluster(self):
         self._showSnap()
         self.myidentifier=self.mydict['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]['ClusterIdentifier']
-        print "this does not actually delete the cluster. Run the following command on your own risk :)\n"
-        print "import boto"
-        print "conn = boto.connect_redshift(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se)
-        print "conn.delete_cluster('%s', skip_final_cluster_snapshot=False, final_cluster_snapshot_identifier='%s')"%(self.myidentifier, self.myvar)
+        print ("this does not actually delete the cluster. Run the following command on your own risk :)\n")
+        print ("import boto")
+        print ("conn = boto.connect_redshift(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se))
+        print ("conn.delete_cluster('%s', skip_final_cluster_snapshot=False, final_cluster_snapshot_identifier='%s')"%(self.myidentifier, self.myvar))
         
 ##### Snapshots Management #####
 
@@ -109,11 +109,11 @@ class connect:
                 mydict.append((key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB'))
                 import pandas as pd
                 df = pd.DataFrame(mydict)
-                print key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB'
+                print (key.name.encode('utf-8'), int(mykey.size)//1000000, 'MB')
             return df
         else:
             for item in self.buckets:
-                print item.name
+                print (item.name)
                 
     def uploadFile(self, bucketname, filename='', path=''):
         from boto.s3.key import Key
@@ -141,7 +141,7 @@ class connect:
         for item in self.buckets:
             try:
                 current = item.get_lifecycle_config()
-                print item, current[0].transition
+                print (item, current[0].transition)
             except:
                 pass
 
@@ -164,7 +164,7 @@ class connect:
     def startEc2Spot(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
         if instance_type.startswith('t2'):
-            print "spot instance are not allowed for t2 series"
+            print ("spot instance are not allowed for t2 series")
             exit()
 
         aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement, 'price': self.MAX_SPOT_BID}
@@ -177,15 +177,15 @@ class connect:
         for sir in reqs:
             if sir.id == job_sir_id:
                 job_instance_id = sir.instance_id
-                print "job instance id: " + str(job_instance_id)
+                print ("job instance id: " + str(job_instance_id))
 
                 if self.myaddress:
                     self.ec2_conn.associate_address(job_instance_id, self.myaddress)
-                    print 'ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress
+                    print ('ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress)
                 else:
                     address = self.ec2_conn.allocate_address()
                     self.ec2_conn.associate_address(job_instance_id, address.public_ip)
-                    print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip)
+                    print ('ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip))
 
     def startEc2(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
@@ -200,17 +200,17 @@ class connect:
         #self.ec2_conn.associate_address(iid.id, address.public_ip)
         if self.myaddress:
             self.ec2_conn.associate_address(iid.id, self.myaddress)
-            print 'ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress
+            print ('ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress)
         else:
             address = self.ec2_conn.allocate_address()
             self.ec2_conn.associate_address(iid.id, address.public_ip)
-            print 'ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip)
+            print ('ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip))
 
 
     def deleteEc2(self,  instance_id_to_delete, mylist=None):
         mylist=[]
         mylist.append(instance_id_to_delete)
-        print mylist
+        print (mylist)
         self.ec2_conn.terminate_instances(instance_ids=mylist)
  
     def deleteAllEc2(self):
@@ -219,10 +219,10 @@ class connect:
         for reservation in info:
             mylistDel.append(reservation.id)
               
-        print "this does not actually delete the ec2 instances. Run the following command on your own risk :)\n"
-        print "import boto"
-        print "ec2_conn = boto.connect_ec2(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se)
-        print "ec2_conn.terminate_instances(instance_ids=%s)" % (mylistDel)      
+        print ("this does not actually delete the ec2 instances. Run the following command on your own risk :)\n")
+        print ("import boto")
+        print ("ec2_conn = boto.connect_ec2(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se))
+        print ("ec2_conn.terminate_instances(instance_ids=%s)" % (mylistDel))      
         
                 
     def showImages(self):
