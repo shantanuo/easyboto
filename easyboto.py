@@ -94,7 +94,7 @@ class connect:
         import pickle
         with open('filename.pickle', 'wb') as handle:
             pickle.dump(df, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        print df
+        print (df)
         return df
 
 ##### s3 Management #####
