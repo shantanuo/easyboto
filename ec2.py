@@ -17,7 +17,7 @@ class connect:
         yum install -y docker mysql git python-pip
         sudo amazon-linux-extras install -y docker
         pip install aws-ec2-assign-elastic-ip
-        aws-ec2-assign-elastic-ip --access-key AKIAIY6BQUW4X665VS6A --secret-key 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  --valid-ips 18.208.241.12
+        aws-ec2-assign-elastic-ip --access-key xxx --secret-key xxx  --valid-ips 18.208.241.12
         service docker start
         docker run -d -p 8888:8888 -v /tmp:/tmp continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y && cd /tmp/ && /opt/conda/bin/jupyter notebook --NotebookApp.token='india' --notebook-dir=/tmp --ip='0.0.0.0' --port=8888 --no-browser --allow-root"
 
