@@ -11,7 +11,27 @@ class connect:
 
         import boto
         self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-   
+        self.mytest = b"""
+        #!/bin/bash -ex
+
+        yum install -y docker mysql git python-pip
+        sudo amazon-linux-extras install -y docker
+        pip install aws-ec2-assign-elastic-ip
+        aws-ec2-assign-elastic-ip --access-key AKIAIY6BQUW4X665VS6A --secret-key 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  --valid-ips 18.208.241.12
+        service docker start
+        docker run -d -p 8888:8888 -v /tmp:/tmp continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y && cd /tmp/ && /opt/conda/bin/jupyter notebook --NotebookApp.token='india' --notebook-dir=/tmp --ip='0.0.0.0' --port=8888 --no-browser --allow-root"
+
+        """
+       
+        self.bug=b"""
+        from boto.ec2.blockdevicemapping import BlockDeviceType, BlockDeviceMapping
+        self.dev_sda1 = BlockDeviceType()
+        self.bdm = BlockDeviceMapping()
+        self.dev_sda1.size = 100
+        self.bdm['/dev/xvda'] = self.dev_sda1
+        #reservation = image.run(..., , ...)
+        """
+
     def showEc2(self):
         mylist=[]
         info=self.ec2_conn.get_only_instances()
@@ -29,7 +49,7 @@ class connect:
     def startEc2Spot(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
 
-        aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement, 'price': self.MAX_SPOT_BID}
+        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement, 'price': self.MAX_SPOT_BID}
         daid=dict(aid)
         rid=self.ec2_conn.request_spot_instances(**daid)
         import time
@@ -51,7 +71,7 @@ class connect:
 
     def startEc2(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
-        aid = {'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
+        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
         daid=dict(aid)
         rid=self.ec2_conn.run_instances(**daid)
 
@@ -97,10 +117,10 @@ class connect:
         df = pd.DataFrame(mylist, columns=col_name)
         return df
     
-"""
+    """
 #x = connect('xxx', 'xxx')
 #x.startEc2Spot('ami-0a721ca7c0ae5cd2c', 't2.small')
 #x.showEc2()
 #x.deleteAllEc2()
 #x.showImages()  
-"""
+    """
