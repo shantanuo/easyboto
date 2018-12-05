@@ -14,14 +14,14 @@
       "ImageId": "ami-009d6802948d06e52",
       "InstanceType": "c4.large",
       "SubnetId": "subnet-8bb550d1",
-      "KeyName": "dec12a",
+      "KeyName": "dec15a",
       "BlockDeviceMappings": [
         {
           "DeviceName": "/dev/xvda",
           "Ebs": {
             "DeleteOnTermination": true,
             "VolumeType": "standard",
-            "VolumeSize": 500
+            "VolumeSize": 400
           }
         }
       ],
@@ -43,3 +43,4 @@
   "Type": "request"
 }
 }}}}
+
