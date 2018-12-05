@@ -3,15 +3,16 @@ class connect:
     def __init__(self, access=None, secret=None):
         self.ac = access
         self.se = secret
-        self.placement='ap-south-1a'
+        self.placement='us-east-1b'
         self.key='dec15a'
         self.myaddress='50.17.24.114'
         self.MAX_SPOT_BID='1.0' 
-        self.subnet_id=None
-        self.region='ap-south-1'
+        #self.subnet_id=None
+        self.region='us-east-1'
         #self.myaddress=None
 
         import boto
+        import boto.ec2
         self.ec2_conn = boto.ec2.connect_to_region(self.region, aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         self.mytest = b"""
         #!/bin/bash -ex
@@ -51,7 +52,7 @@ class connect:
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
 
         aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 
-               'placement': self.placement, 'price': self.MAX_SPOT_BID, 'subnet_id': self.subnet_id}
+               'placement': self.placement, 'price': self.MAX_SPOT_BID, }
         daid=dict(aid)
         rid=self.ec2_conn.request_spot_instances(**daid)
         import time
@@ -121,7 +122,7 @@ class connect:
     
     """
 #x = connect('xxx', 'xxx')
-#x.startEc2Spot('ami-0a721ca7c0ae5cd2c', 't2.small')
+#x.startEc2Spot('ami-009d6802948d06e52', 'm3.large')
 #x.showEc2()
 #x.deleteAllEc2()
 #x.showImages()  
