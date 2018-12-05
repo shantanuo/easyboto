@@ -3,14 +3,16 @@ class connect:
     def __init__(self, access=None, secret=None):
         self.ac = access
         self.se = secret
-        self.placement='us-east-1d'
-        self.key='dec12a'
+        self.placement='ap-south-1a'
+        self.key='dec15a'
         self.myaddress='50.17.24.114'
         self.MAX_SPOT_BID='1.0' 
+        self.subnet_id=None
+        self.region='ap-south-1'
         #self.myaddress=None
 
         import boto
-        self.ec2_conn = boto.connect_ec2(aws_access_key_id=self.ac, aws_secret_access_key=self.se)
+        self.ec2_conn = boto.ec2.connect_to_region(self.region, aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         self.mytest = b"""
         #!/bin/bash -ex
 
@@ -50,7 +52,7 @@ class connect:
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
 
         aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 
-               'placement': self.placement, 'price': self.MAX_SPOT_BID, 'subnet_id': 'subnet-8bb550d1'}
+               'placement': self.placement, 'price': self.MAX_SPOT_BID, 'subnet_id': self.subnet_id}
         daid=dict(aid)
         rid=self.ec2_conn.request_spot_instances(**daid)
         import time
