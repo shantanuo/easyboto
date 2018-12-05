@@ -3,9 +3,9 @@ class connect:
     def __init__(self, access=None, secret=None):
         self.ac = access
         self.se = secret
-        self.placement='us-east-1b'
-        self.key='dec15a'
-        self.myaddress='18.208.241.12'
+        self.placement='us-east-1d'
+        self.key='dec12a'
+        self.myaddress='50.17.24.114'
         self.MAX_SPOT_BID='1.0' 
         #self.myaddress=None
 
@@ -49,7 +49,8 @@ class connect:
     def startEc2Spot(self, ami, instance_type):
         #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
 
-        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement, 'price': self.MAX_SPOT_BID}
+        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 
+               'placement': self.placement, 'price': self.MAX_SPOT_BID, 'subnet_id': 'subnet-8bb550d1'}
         daid=dict(aid)
         rid=self.ec2_conn.request_spot_instances(**daid)
         import time
