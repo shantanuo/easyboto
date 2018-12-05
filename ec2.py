@@ -15,14 +15,13 @@ class connect:
         self.ec2_conn = boto.ec2.connect_to_region(self.region, aws_access_key_id=self.ac, aws_secret_access_key=self.se)
         self.mytest = b"""
         #!/bin/bash -ex
-
         yum install -y docker mysql git python-pip
         sudo amazon-linux-extras install -y docker
         pip install aws-ec2-assign-elastic-ip
         aws-ec2-assign-elastic-ip --access-key xxx --secret-key xxx  --valid-ips 18.208.241.12
         service docker start
-        docker run -d -p 8888:8888 -v /tmp:/tmp continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y && cd /tmp/ && /opt/conda/bin/jupyter notebook --NotebookApp.token='india' --notebook-dir=/tmp --ip='0.0.0.0' --port=8888 --no-browser --allow-root"
-
+        docker run -d -p 8888:8888 -v /tmp:/tmp shantanuo/notebook
+        
         """
        
         self.bug=b"""
