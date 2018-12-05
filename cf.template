@@ -34,7 +34,8 @@
            pip install aws-ec2-assign-elastic-ip\n 
            sudo amazon-linux-extras install -y docker\n
            aws-ec2-assign-elastic-ip --access-key xxx --secret-key xxx --valid-ips 35.174.198.170\n
-           service docker start\n"
+           service docker start\n
+           docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook\n"
                     }
  },
     }
