@@ -14,8 +14,18 @@ cat > specification.json << "here_doc"
     {
       "ImageId": "ami-009d6802948d06e52",
       "InstanceType": "c4.large",
-      "SubnetId": "subnet-8bb550d1",
       "KeyName": "dec15a",
+
+          "NetworkInterfaces": [
+              {
+                  "DeviceIndex": 0,
+                  "SubnetId": "subnet-8bb550d1",
+                  "Groups": [ "sg-aab087d5" ],
+                  "AssociatePublicIpAddress": true
+              }
+          ],
+
+
       "BlockDeviceMappings": [
         {
           "DeviceName": "/dev/xvda",
