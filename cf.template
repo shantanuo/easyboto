@@ -13,7 +13,17 @@
     {
       "ImageId": "ami-009d6802948d06e52",
       "InstanceType": "c4.large",
-      "SubnetId": "subnet-8bb550d1",
+      "SpotPrice": "0.105",
+
+          "NetworkInterfaces": [
+              {
+                  "DeviceIndex": 0,
+                  "SubnetId": "subnet-8bb550d1",
+                  "Groups": [ "sg-aab087d5" ],
+                  "AssociatePublicIpAddress": true
+              }
+          ],
+
       "KeyName": "dec15a",
       "BlockDeviceMappings": [
         {
@@ -38,6 +48,43 @@
            docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook\n"
                     }
  },
+    }
+  ],
+  "Type": "request"
+}
+}}}}
+
+
+For windows:
+
+{
+   "Resources":{
+      "MySpotFleet":{
+         "Type":"AWS::EC2::SpotFleet",
+         "Properties":{
+            "SpotFleetRequestConfigData":{
+
+  "IamFleetRole": "arn:aws:iam::302378362623:role/aws-ec2-spot-fleet-tagging-role",
+  "AllocationStrategy": "lowestPrice",
+  "TargetCapacity": 1,
+  "SpotPrice": "1.105",
+  "LaunchSpecifications": [
+    {
+      "ImageId": "ami-0b839332cdd586918",
+      "InstanceType": "t2.small",
+      "SpotPrice": "1.105",
+
+          "NetworkInterfaces": [
+              {
+                  "DeviceIndex": 0,
+                  "SubnetId": "subnet-7639c23b",
+                  "Groups": [ "sg-282e5e41" ],
+                  "AssociatePublicIpAddress": true
+              }
+          ],
+
+      "KeyName": "dec15a",
+  
     }
   ],
   "Type": "request"
