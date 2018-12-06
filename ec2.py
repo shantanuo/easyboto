@@ -1,62 +1,43 @@
 class connect:
-    '''Managing AWS using boto made easy'''
     def __init__(self, access=None, secret=None):
+        self.region='us-east-2'
         self.ac = access
         self.se = secret
-        self.placement='us-east-1b'
+        self.myaddress='52.14.29.127'
         self.key='dec15a'
-        self.myaddress='50.17.24.114'
         self.MAX_SPOT_BID='1.0' 
-        #self.subnet_id=None
-        self.region='us-east-1'
-        #self.myaddress=None
+        self.security_groups = ['default']
 
+        import time
         import boto
         import boto.ec2
+        from boto.ec2.blockdevicemapping import BlockDeviceType, BlockDeviceMapping
         self.ec2_conn = boto.ec2.connect_to_region(self.region, aws_access_key_id=self.ac, aws_secret_access_key=self.se)
-        self.mytest = b"""
+
+        shell_script = """
         #!/bin/bash -ex
         yum install -y docker mysql git python-pip
         sudo amazon-linux-extras install -y docker
         pip install aws-ec2-assign-elastic-ip
-        aws-ec2-assign-elastic-ip --access-key xxx --secret-key xxx  --valid-ips 18.208.241.12
+        aws-ec2-assign-elastic-ip --access-key {}, --secret-key {}  --valid-ips {}
         service docker start
-        docker run -d -p 8888:8888 -v /tmp:/tmp shantanuo/notebook
+        docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook
         
         """
-       
-        self.bug=b"""
-        from boto.ec2.blockdevicemapping import BlockDeviceType, BlockDeviceMapping
+        self.my_user_data=shell_script.format(self.ac,self.se, self.myaddress).encode()
+    
         self.dev_sda1 = BlockDeviceType()
         self.bdm = BlockDeviceMapping()
-        self.dev_sda1.size = 100
+        self.dev_sda1.size = 500
         self.bdm['/dev/xvda'] = self.dev_sda1
-        #reservation = image.run(..., , ...)
-        """
 
-    def showEc2(self):
-        mylist=[]
-        info=self.ec2_conn.get_only_instances()
-        for reservation in info:
-            mylist.append( (reservation , reservation.launch_time, reservation.instance_type, 
-                            reservation.image_id,reservation.state, reservation.ip_address))
-        import pandas as pd
-        col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
-        try:
-            df = pd.DataFrame(mylist, columns=col_name)
-            return df
-        except ValueError:
-            pass
-        
     def startEc2Spot(self, ami, instance_type):
-        #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
-
-        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 
-               'placement': self.placement, 'price': self.MAX_SPOT_BID, }
+        aid = {'image_id': ami, 'instance_type': instance_type, 'user_data': self.my_user_data , 'key_name': self.key, 
+              'security_groups': self.security_groups, 'block_device_map' : self.bdm, 'price': self.MAX_SPOT_BID}
         daid=dict(aid)
         rid=self.ec2_conn.request_spot_instances(**daid)
-        import time
-        time.sleep(300)
+
+        time.sleep(180)
         job_sir_id = rid[0].id # spot instance request = sir, job_ is the relevant aws item for this job
         reqs = self.ec2_conn.get_all_spot_instance_requests()
         for sir in reqs:
@@ -71,18 +52,16 @@ class connect:
                     address = self.ec2_conn.allocate_address()
                     self.ec2_conn.associate_address(job_instance_id, address.public_ip)
                     print ('ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip))
+                    
 
     def startEc2(self, ami, instance_type):
-        #aid="image_id='%s', placement='us-east-1a', key_name='%s', instance_type='%s'" % (ami, key_name, instance_type)
-        aid = {'user_data': self.mytest , 'image_id': ami, 'key_name': self.key, 'instance_type': instance_type, 'placement': self.placement}
+        aid = { 'image_id': ami, 'instance_type': instance_type, 'user_data': self.my_user_data ,'key_name': self.key, 
+                 'security_groups': self.security_groups, 'block_device_map' : self.bdm}
         daid=dict(aid)
         rid=self.ec2_conn.run_instances(**daid)
 
-        import time
         time.sleep(120)
         iid=self.ec2_conn.get_all_instances(filters={'reservation-id': rid.id})[0].instances[0]
-        #address = self.ec2_conn.allocate_address()
-        #self.ec2_conn.associate_address(iid.id, address.public_ip)
         if self.myaddress:
             self.ec2_conn.associate_address(iid.id, self.myaddress)
             print ('ssh -i ' + self.key+ '.pem ec2-user@'+self.myaddress)
@@ -90,8 +69,21 @@ class connect:
             address = self.ec2_conn.allocate_address()
             self.ec2_conn.associate_address(iid.id, address.public_ip)
             print ('ssh -i ' + self.key+ '.pem ec2-user@'+str(address.public_ip))
-
-
+                   
+    def showEc2(self):
+        mylist=[]
+        info=self.ec2_conn.get_only_instances()
+        for reservation in info:
+            mylist.append( (reservation , reservation.launch_time, reservation.instance_type, 
+                            reservation.image_id,reservation.state, reservation.ip_address))
+        import pandas as pd
+        col_name=['instance_id', 'launch_time', 'instance_type', 'image_id', 'state', 'ip_address']
+        try:
+            df = pd.DataFrame(mylist, columns=col_name)
+            return df
+        except ValueError:
+            pass
+            
     def deleteEc2(self,  instance_id_to_delete, mylist=None):
         mylist=[]
         mylist.append(instance_id_to_delete)
@@ -109,7 +101,6 @@ class connect:
         print ("ec2_conn = boto.connect_ec2(aws_access_key_id='%s', aws_secret_access_key='%s')" % (self.ac, self.se))
         print ("ec2_conn.terminate_instances(instance_ids=%s)" % (mylistDel))      
         
-                
     def showImages(self):
         mylist=[]
         i_list=self.ec2_conn.get_all_images(owners=['self'])
@@ -127,3 +118,4 @@ class connect:
 #x.deleteAllEc2()
 #x.showImages()  
     """
+    
