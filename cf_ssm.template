@@ -1,0 +1,85 @@
+{  
+   "Parameters":{  
+      "OksoftAmiId":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"ubuntu1804"
+      },
+      "OksoftInstanceType":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"myEC2TypeDev"
+      },
+      "OksoftRole":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"myRole"
+      },
+      "OksoftSubnet":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"mysubnet"
+      },
+      "OksoftSG":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"mygroups"
+      },
+      "Oksoftaccess":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"myaccess"
+      },
+      "Oksoftsecret":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"mysecret"
+      }
+   },
+   "Resources":{  
+      "MySpotFleet":{  
+         "Type":"AWS::EC2::SpotFleet",
+         "Properties":{  
+            "SpotFleetRequestConfigData":{  
+               "IamFleetRole":!Ref OksoftRole,
+               "AllocationStrategy":"lowestPrice",
+               "TargetCapacity":1,
+               "SpotPrice":"1.105",
+               "LaunchSpecifications":[  
+                  {  
+                     "ImageId":!Ref OksoftAmiId,
+                     "InstanceType":!Ref OksoftInstanceType,
+                     "SpotPrice":"0.105",
+                     "NetworkInterfaces":[  
+                        {  
+                           "DeviceIndex":0,
+                           "SubnetId":!Ref OksoftSubnet,
+                           "Groups":[  
+                              !Ref OksoftSG
+                           ],
+                           "AssociatePublicIpAddress":true
+                        }
+                     ],
+                     "KeyName":"dec15a",
+                     "BlockDeviceMappings":[  
+                        {  
+                           "DeviceName":"/dev/xvda",
+                           "Ebs":{  
+                              "DeleteOnTermination":true,
+                              "VolumeType":"standard",
+                              "VolumeSize":400
+                           }
+                        }
+                     ],
+                     "UserData":{  
+                        "Fn::Base64":{  
+                           "Fn::Sub":"#!/bin/bash -xe\n 
+           yum install -y docker mysql git python-pip\n   
+           pip install aws-ec2-assign-elastic-ip\n  
+           sudo amazon-linux-extras install -y docker\n 
+           aws-ec2-assign-elastic-ip --access-key !Ref Oksoftaccess --secret-key !Ref Oksoftsecret --valid-ips 35.174.198.170\n 
+           service docker start\n 
+           docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook\n"
+                        }
+                     }
+                  }
+               ],
+               "Type":"request"
+            }
+         }
+      }
+   }
+}
