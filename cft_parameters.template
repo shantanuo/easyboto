@@ -37,7 +37,7 @@
       "ImageId": !Ref LatestAmiId,
       "InstanceType": "c3.large",
       "SpotPrice": "0.105",
-      "SubnetId": !Split [ " , ", mySubnetIDs ],
+      "SubnetId": !Join [ " , ",  !Ref mySubnetIDs ],
       "KeyName": !Ref myKeyPair,
       "BlockDeviceMappings": [
         {
