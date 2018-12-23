@@ -1,0 +1,70 @@
+{
+"Parameters": {
+  "LatestAmiId": {
+    "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",     
+    "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-ebs"
+},
+  "myKeyPair" : {
+    "Description" : "Amazon EC2 Key Pair",
+    "Type" : "AWS::EC2::KeyPair::KeyName"
+  },
+  "mySubnetIDs" : {
+    "Description" : "Subnet IDs",
+    "Type" : "List<AWS::EC2::Subnet::Id>"
+  },
+     "Oksoftaccess":{  
+         "Type":"AWS::SSM::Parameter::Value<String>",
+         "Default":"myEC2TypeDev"
+      },
+      "Oksoftsecret":{  
+         "Type":"String",
+         "Default":"mysecret1"
+      }
+},
+
+   "Resources":{
+      "MySpotFleet":{
+         "Type":"AWS::EC2::SpotFleet",
+         "Properties":{
+            "SpotFleetRequestConfigData":{
+
+  "IamFleetRole": "arn:aws:iam::513469704633:role/aws-ec2-spot-fleet-tagging-role",
+  "AllocationStrategy": "lowestPrice",
+  "TargetCapacity": 1,
+  "SpotPrice": "1.105",
+  "LaunchSpecifications": [
+    {
+      "ImageId": !Ref LatestAmiId,
+      "InstanceType": "c3.large",
+      "SpotPrice": "0.105",
+      "SubnetId": !Split [ " , ", mySubnetIDs ],
+      "KeyName": !Ref myKeyPair,
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/xvda",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "standard",
+            "VolumeSize": 400
+          }
+        }
+      ],
+
+                   "UserData": {
+ "Fn::Base64": {
+ "Fn::Sub": 
+          "#!/bin/bash -xe\n
+           yum install -y docker mysql git python-pip\n  
+           pip install aws-ec2-assign-elastic-ip\n 
+           sudo amazon-linux-extras install -y docker\n
+           service docker start\n
+           docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook\n
+           /usr/local/bin/aws-ec2-assign-elastic-ip --access-key !Ref Oksoftaccess --secret-key !Ref Oksoftsecret --valid-ips 18.210.57.140\n"
+                    }
+ },
+    }
+  ],
+  "Type": "request"
+}
+}}}}
+
