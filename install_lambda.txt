@@ -1,0 +1,105 @@
+{
+    "Description": "CloudFormation template to deploy lambda function",
+    "Parameters": {
+        "s3Bucket": {
+            "Default": "datameetgeo",  
+            "Description": "s3 bucket name of the lambda",
+            "Type": "String"
+        },
+        "s3Key": {
+            "Default": "lambda_function.zip",
+            "Description": "s3 bucket key of the lambda",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "TerminateEMRLambdaFunction": {
+            "Properties": {
+                "Code": {
+                    "S3Bucket": {
+                        "Ref": "s3Bucket"
+                    },
+                    "S3Key": {
+                        "Ref": "s3Key"
+                    }
+                },
+                "FunctionName": "dailyCost",
+                "Handler": "lambda_function.lambda_handler",
+                "MemorySize": 128,
+                "Role": {
+                    "Fn::GetAtt": [
+                        "GetCost",
+                        "Arn"
+                    ]
+                },
+                "Runtime": "python2.7",
+                "Timeout": "60"
+            },
+            "Type": "AWS::Lambda::Function"
+        },
+        "GetCost": {
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                            }
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": "*",
+                                    "Effect": "Allow",
+                                    "Resource": "*",
+                                    "Sid":"GenericAccess"
+                                }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "DailyCostPolicy"
+                    }
+                ],
+                "RoleName": "DailyCostRole"
+            },
+            "Type": "AWS::IAM::Role"
+        },
+        "TerminateEMRSNSTopic": {
+            "Properties": {
+                "DisplayName": "Kill Idle EMR",
+                "Subscription": [
+                    {
+                        "Endpoint": {
+                            "Fn::GetAtt": [
+                                "TerminateEMRLambdaFunction",
+                                "Arn"
+                            ]
+                        },
+                        "Protocol": "lambda"
+                    }
+                ],
+                "TopicName": "TerminateEMRSNSTopic"
+            },
+            "Type": "AWS::SNS::Topic"
+        },
+        "LambdaInvokePermission":{
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "Principal": "sns.amazonaws.com",
+                "SourceArn": { "Ref": "TerminateEMRSNSTopic" },
+                "FunctionName": {
+                    "Fn::GetAtt": [ "TerminateEMRLambdaFunction", "Arn" ]
+                }
+            },
+            "Type": "AWS::Lambda::Permission"
+        }
+    }
+}
