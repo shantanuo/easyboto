@@ -1,0 +1,78 @@
+{
+"Parameters" : {
+  "LatestAmiId" : { 
+    "Type" : "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    "Default" : "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-ebs"
+},
+      "OksoftSubnet":{  
+         "Type": "AWS::EC2::Subnet::Id"
+      },
+      "OksoftSG":{  
+         "Type":"AWS::EC2::SecurityGroup::Id"
+      },
+  "KeyName": {
+    "Type": "AWS::EC2::KeyPair::KeyName"
+  },
+  "InstanceType": {
+     "Type": "String",
+     "Default": "c4.large",
+     "AllowedValues": ["c4.large", "m5.xlarge", "m5.2xlarge"]
+}
+},
+
+   "Resources":{
+      "MySpotFleet":{
+         "Type":"AWS::EC2::SpotFleet",
+         "Properties":{
+            "SpotFleetRequestConfigData":{
+
+  "IamFleetRole": { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-ec2-spot-fleet-tagging-role" },
+  "AllocationStrategy": "lowestPrice",
+  "TargetCapacity": 1,
+  "SpotPrice": "2.105",
+  "Type":"maintain",
+  "LaunchSpecifications": [
+    {
+      "ImageId": {"Ref": "LatestAmiId"},
+      "InstanceType":  {"Ref": "InstanceType"},
+      "SpotPrice": "2.105",
+
+          "NetworkInterfaces": [
+              {
+                  "DeviceIndex": 0,
+                  "SubnetId":   { "Ref" : "OksoftSubnet" } ,
+                  "Groups": [ { "Ref" : "OksoftSG" } ],
+                  "AssociatePublicIpAddress": true
+              }
+          ],
+
+      "KeyName" : { "Ref" : "KeyName" },
+
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/xvda",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "standard",
+            "VolumeSize": 400
+          }
+        }
+      ],
+                     "UserData":{  
+                        "Fn::Base64":{  
+                           "Fn::Sub":"#!/bin/bash -xe\n  
+           yum install -y docker mysql git python-pip > /tmp/line1_succ.txt 2> /tmp/line1_err.txt\n 
+           service docker start > /tmp/line2_succ.txt 2> /tmp/line2_err.txt \n 
+           docker run -d -p 8887:8888 -v /tmp:/tmp shantanuo/notebook > /tmp/line3_succ.txt 2> /tmp/line3_err.txt \n
+           pip install aws-ec2-assign-elastic-ip > /tmp/line4_succ.txt 2> /tmp/line4_err.txt \n  
+           /usr/local/bin/aws-ec2-assign-elastic-ip --access-key !Ref Oksoftaccess --secret-key !Ref Oksoftsecret --valid-ips 35.174.198.170 > /tmp/line5_succ.txt 2> /tmp/line5_err.txt \n "
+
+                        }
+                     }
+                  }
+               ]
+            }
+         }
+      }
+   }
+}
