@@ -85,8 +85,9 @@ class connect:
     def runQuery(self, my_query):
 #        self._showSnap()
         import psycopg2
+        from psycopg2.extras import RealDictCursor
         pconn = psycopg2.connect("host='"+self.my_add+"' port='5439' dbname='"+self.my_db+"' user='"+self.my_user+"' password='"+self.my_pas+"'")
-        cur = pconn.cursor()            
+        cur = pconn.cursor(cursor_factory=RealDictCursor)            
         cur.execute(my_query)
         mydict = cur.fetchall()
         import pandas as pd
